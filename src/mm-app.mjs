@@ -1,7 +1,5 @@
+import html from './html.mjs';
 import './mm-toolbar.mjs';
-
-// Hack to get html syntax highlighting within template literals
-const html = String.raw;
 
 const tmpl = document.createElement('template');
 tmpl.innerHTML = html`

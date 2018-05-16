@@ -1,5 +1,4 @@
-// Hack to get html syntax highlighting within template literals
-const html = String.raw;
+import html from './html.mjs';
 
 const tmpl = document.createElement('template');
 tmpl.innerHTML = html`
