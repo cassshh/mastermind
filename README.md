@@ -1,2 +1,15 @@
 # Mastermind
-I'm talking about the board game, not myself.
+
+### Masterpiece being build using the native web **#UseThePlatform** <3
+
+Install dependencies
+
+```
+$ yarn
+```
+
+Serve
+
+```
+$ yarn start
+```
