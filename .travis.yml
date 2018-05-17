@@ -1,7 +1,12 @@
 language: node_js
 node_js:
   - "node"
-before_script:
-  - yarn
 script:
   - yarn build
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+  keep-history: true
+  on:
+    branch: gh-pages
