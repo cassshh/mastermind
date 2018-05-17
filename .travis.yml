@@ -11,3 +11,5 @@ deploy:
   local-dir: build
   on:
     branch: master
+notifications:
+  email: false
