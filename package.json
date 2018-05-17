@@ -7,14 +7,21 @@
   "author": "cassshh",
   "license": "MIT",
   "scripts": {
-    "start": "http-server"
+    "start": "http-server",
+    "build": "rollup -c"
   },
   "dependencies": {
     "@webcomponents/webcomponentsjs": "^2.0.0"
   },
   "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-env": "^1.7.0",
     "eslint": "^4.19.1",
-    "http-server": "^0.11.1"
+    "http-server": "^0.11.1",
+    "rollup": "^0.59.1",
+    "rollup-plugin-babel": "^3.0.4",
+    "rollup-plugin-copy": "^0.2.3"
   },
   "private": true
 }
