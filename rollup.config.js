@@ -1,5 +1,7 @@
 import babel from 'rollup-plugin-babel';
 import copy from 'rollup-plugin-copy';
+import uglify from 'rollup-plugin-uglify';
+import minify from 'rollup-plugin-babel-minify';
 
 export default {
   entry: 'src/app.mjs',
@@ -7,6 +9,8 @@ export default {
   format: 'iife',
   sourceMap: 'inline',
   plugins: [
+    uglify(),
+    minify(),
     babel({
       exclude: 'node_modules/**'
     }),

@@ -21,7 +21,9 @@
     "http-server": "^0.11.1",
     "rollup": "^0.59.1",
     "rollup-plugin-babel": "^3.0.4",
-    "rollup-plugin-copy": "^0.2.3"
+    "rollup-plugin-babel-minify": "^4.0.0",
+    "rollup-plugin-copy": "^0.2.3",
+    "rollup-plugin-uglify": "^3.0.0"
   },
   "private": true
 }
