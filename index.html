@@ -46,6 +46,9 @@
   <meta property="og:site_name" content="Mastermind">
   <meta property="og:image" content="./images/manifest/android-chrome-256x256.png" />
 
+  <link rel="preload" href="./node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js" as="script">
+  <link rel="modulepreload" href="./src/app.mjs">
+
   <script>
     // Load and register pre-caching Service Worker
     if ('serviceWorker' in navigator) {
