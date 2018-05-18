@@ -23,8 +23,6 @@ export default {
       'favicon-32x32.png': 'build/favicon-32x32.png',
       'manifest.json': 'build/manifest.json',
       'service-worker.js': 'build/service-worker.js',
-      'node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js':
-        'build/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js',
       verbose: true
     })
   ]

@@ -3,7 +3,7 @@ import html from './html.mjs';
 const tmpl = document.createElement('template');
 tmpl.innerHTML = html`
   <style>
-    :host{
+    :host {
       display: -webkit-box;
       display: -moz-box;
       display: -ms-flexbox;
@@ -16,17 +16,21 @@ tmpl.innerHTML = html`
       justify-content: center;
     }
 
-    slot {
+    .slot {
       color: var(--primary-color, #212121);
       font-size: 1.75em;
     }
   </style>
-  <slot></slot>
+  <span class="slot"><slot></slot></span>
 `;
 
 class MmToolbar extends HTMLElement {
   constructor() {
     super();
+    if (typeof ShadyCSS !== 'undefined') {
+      ShadyCSS.prepareTemplate(tmpl, 'mm-toolbar');
+      ShadyCSS.styleElement(this);
+    }
     // Attach a shadow root to the element.
     let shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.appendChild(tmpl.content.cloneNode(true));
