@@ -10,18 +10,18 @@ tmpl.innerHTML = html`
       display: -webkit-flex;
       display: flex;
       width: 100%;
-      height: 64px;
+      flex: 1;
+      max-height: 100%;
       background: var(--accent-color, #ed1a59);
+      color: var(--primary-color, #212121);
+      font-size: 2.75em;
       align-items: center;
       justify-content: center;
-    }
-
-    .slot {
-      color: var(--primary-color, #212121);
-      font-size: 1.75em;
+      border-radius: 0 0 15px 15px;
+      transition: max-height 1s ease, font-size .7s ease-in-out .3s;
     }
   </style>
-  <span class="slot"><slot></slot></span>
+  <slot></slot>
 `;
 
 class MmToolbar extends HTMLElement {
