@@ -2,8 +2,11 @@
   "name": "Mastermind",
   "short_name": "Mastermind",
   "description": "Mastermind the game",
-  "start_url": "./",
+  "lang": "en-us",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "theme_color": "#212121",
   "background_color": "#212121",
   "icons": [
