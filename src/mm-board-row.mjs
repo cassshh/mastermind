@@ -9,27 +9,28 @@ tmpl.innerHTML = html`
       display: -ms-flexbox;
       display: -webkit-flex;
       display: flex;
-      width: 100%;
-      flex: 1;
-      max-height: 100%;
-      background: var(--accent-color, #ed1a59);
-      color: var(--primary-color, #212121);
-      font-size: 2.75em;
-      align-items: center;
-      justify-content: center;
-      border-radius: 0 0 15px 15px;
-      transition: max-height 1s ease, font-size .7s ease-in-out .3s;
     }
+
+    .container {
+      flex: 1;
+      background: coral;
+      margin: 2px;
+    }
+
   </style>
-  <slot></slot>
+  <div class="container"></div>
+  <div class="container"></div>
+  <div class="container"></div>
+  <div class="container"></div>
+  <div class="container"></div>
 `;
 
-class MmToolbar extends HTMLElement {
+class MmBoardRow extends HTMLElement {
   constructor() {
     super();
     if (typeof ShadyCSS !== 'undefined') {
       // eslint-disable-next-line no-undef
-      ShadyCSS.prepareTemplate(tmpl, 'mm-toolbar');
+      ShadyCSS.prepareTemplate(tmpl, 'mm-board-row');
       // eslint-disable-next-line no-undef
       ShadyCSS.styleElement(this);
     }
@@ -38,4 +39,4 @@ class MmToolbar extends HTMLElement {
     shadowRoot.appendChild(tmpl.content.cloneNode(true));
   }
 }
-window.customElements.define('mm-toolbar', MmToolbar);
+window.customElements.define('mm-board-row', MmBoardRow);

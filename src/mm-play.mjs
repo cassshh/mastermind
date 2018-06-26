@@ -18,12 +18,15 @@ tmpl.innerHTML = html`
     .play {
       color: var(--accent-color, #ed1a59);
       font-size: 2.5em;
-      font-weight: medium;
       padding: 1em;
       cursor: pointer;
       border: 1px var(--accent-color, #ed1a59) solid;
       border-radius: 15px;
       transition: all .5s ease;
+    }
+
+    .hide { 
+      opacity: 0;
     }
 
     .play:hover {
@@ -35,11 +38,13 @@ tmpl.innerHTML = html`
   <span id="playButton" class="play">Play</span>
 `;
 
-class MmGame extends HTMLElement {
+class MmPlay extends HTMLElement {
   constructor() {
     super();
     if (typeof ShadyCSS !== 'undefined') {
-      ShadyCSS.prepareTemplate(tmpl, 'mm-game');
+      // eslint-disable-next-line no-undef
+      ShadyCSS.prepareTemplate(tmpl, 'mm-play');
+      // eslint-disable-next-line no-undef
       ShadyCSS.styleElement(this);
     }
     // Attach a shadow root to the element.
@@ -52,5 +57,9 @@ class MmGame extends HTMLElement {
   setPlayListener(c) {
     this.play.addEventListener('click', c);
   }
+
+  hide() {
+    this.play.classList.add('hide');
+  }
 }
-window.customElements.define('mm-game', MmGame);
+window.customElements.define('mm-play', MmPlay);

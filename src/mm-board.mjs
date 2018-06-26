@@ -1,4 +1,5 @@
 import html from './html.mjs';
+import './mm-board-row.mjs';
 
 const tmpl = document.createElement('template');
 tmpl.innerHTML = html`
@@ -9,27 +10,39 @@ tmpl.innerHTML = html`
       display: -ms-flexbox;
       display: -webkit-flex;
       display: flex;
-      width: 100%;
+      flex-direction: column;
       flex: 1;
-      max-height: 100%;
-      background: var(--accent-color, #ed1a59);
-      color: var(--primary-color, #212121);
-      font-size: 2.75em;
       align-items: center;
       justify-content: center;
-      border-radius: 0 0 15px 15px;
-      transition: max-height 1s ease, font-size .7s ease-in-out .3s;
+    }
+
+    mm-board-row {
+      display: flex;
+      flex: 1;
+      width: 100%;
+      max-width: 600px;
     }
   </style>
-  <slot></slot>
+  <mm-board-row></mm-board-row>
+  <mm-board-row></mm-board-row>
+  <mm-board-row></mm-board-row>
+  <mm-board-row></mm-board-row>
+  <mm-board-row></mm-board-row>
+  <mm-board-row></mm-board-row>
+  <mm-board-row></mm-board-row>
+  <mm-board-row></mm-board-row>
+  <mm-board-row></mm-board-row>
+  <mm-board-row></mm-board-row>
+  <mm-board-row></mm-board-row>
+  <mm-board-row></mm-board-row>
 `;
 
-class MmToolbar extends HTMLElement {
+class MmBoard extends HTMLElement {
   constructor() {
     super();
     if (typeof ShadyCSS !== 'undefined') {
       // eslint-disable-next-line no-undef
-      ShadyCSS.prepareTemplate(tmpl, 'mm-toolbar');
+      ShadyCSS.prepareTemplate(tmpl, 'mm-board');
       // eslint-disable-next-line no-undef
       ShadyCSS.styleElement(this);
     }
@@ -38,4 +51,4 @@ class MmToolbar extends HTMLElement {
     shadowRoot.appendChild(tmpl.content.cloneNode(true));
   }
 }
-window.customElements.define('mm-toolbar', MmToolbar);
+window.customElements.define('mm-board', MmBoard);
