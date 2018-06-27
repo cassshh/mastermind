@@ -6,5 +6,6 @@ const c1 = [3, 2, 2, 0];
 const c2 = [2, 1, 1, 0];
 // 1  | 1
 
-const master = new Master();
-console.log(master.calc(c1, c2));
+const master = new Master({ solution: c1 });
+// console.log(master.guess({ guess: c2 }));
+console.log(master.try({ guess: c2 }));

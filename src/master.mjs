@@ -1,52 +1,35 @@
 export default class Master {
-  constructor() {
+  constructor({ solution, tries = 12 }) {
+    this.solution = solution;
+    this.tries = tries;
     this.calc = this.calc;
+    this.try = this.try;
   }
 
-  calc(g, s) {
-    if (g.length !== s.length) return;
+  try({ guess = [] }) {
+    return Object.assign(this.guess({ guess }), { tries: --this.tries });
+  }
 
-    // Copy
-    const guess = g.slice();
-    const solution = s.slice();
+  guess({ guess = [] }) {
+    if (guess.length !== this.solution.length) return;
 
-    const result = new Result();
-    const freq = new Array(4).fill(0);
-    for (const i in guess) {
-      if (guess[i] === solution[i]) {
-        result.hits += 1;
+    const obj = { hits: 0, pseudoHits: 0 };
+    const solution = this.solution.slice(); // Copy
+    const freq = new Array(this.solution.length).fill(0);
+
+    guess.forEach((v, i) => {
+      if (v === this.solution[i]) {
+        obj.hits += 1;
         solution[i] = -1;
       } else {
-        freq[guess[i]]++;
+        freq[v]++;
       }
-    }
+    });
 
-    for (const i in freq) {
-      if (freq[i] > 0 && solution.includes(Number.parseInt(i)))
-        result.pseudoHits++;
-    }
-    return result;
-  }
+    freq.forEach((v, i) => {
+      if (v > 0 && this.solution.includes(i)) obj.pseudoHits++;
+    });
 
-  code(c) {
-    switch (c) {
-      case 'B':
-        return 0;
-      case 'G':
-        return 1;
-      case 'R':
-        return 2;
-      case 'Y':
-        return 3;
-      default:
-        return -1;
-    }
-  }
-}
-
-class Result {
-  constructor() {
-    this.hits = 0;
-    this.pseudoHits = 0;
+    return obj;
   }
 }
