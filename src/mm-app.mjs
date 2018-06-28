@@ -21,9 +21,9 @@ tmpl.innerHTML = html`
     }
     
   </style>
-  <mm-toolbar>Mastermind</mm-toolbar>
-  <mm-play></mm-play>
-  <!-- <mm-board></mm-board> -->
+  <mm-toolbar class="toolbar">Mastermind</mm-toolbar>
+  <!-- <mm-play></mm-play> -->
+  <mm-board></mm-board>
 `;
 
 class MmApp extends HTMLElement {
@@ -40,11 +40,11 @@ class MmApp extends HTMLElement {
     shadowRoot.appendChild(tmpl.content.cloneNode(true));
 
     this.toolbar = shadowRoot.querySelector('mm-toolbar');
-    this.play = shadowRoot.querySelector('mm-play');
-    this.play.setPlayListener(() => {
-      this.toolbar.classList.add('toolbar');
-      setTimeout(() => this.play.hide(), 500);
-    });
+    // this.play = shadowRoot.querySelector('mm-play');
+    // this.play.setPlayListener(() => {
+    //   this.toolbar.classList.add('toolbar');
+    //   setTimeout(() => this.play.hide(), 500);
+    // });
   }
 }
 window.customElements.define('mm-app', MmApp);
