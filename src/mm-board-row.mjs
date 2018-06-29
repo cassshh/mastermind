@@ -19,6 +19,7 @@ tmpl.innerHTML = html`
       justify-content: center;
       flex: 1;
       margin: 2px;
+      transition: all 1s ease-in-out;
     }
 
     .keys {
@@ -74,18 +75,24 @@ class MmBoardRow extends HTMLElement {
     let shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.appendChild(tmpl.content.cloneNode(true));
 
+    const containers = shadowRoot.querySelectorAll('.container');
     this.circles = shadowRoot.querySelectorAll('mm-circle:not(.key)');
     this.keys = shadowRoot.querySelectorAll('mm-circle.key');
 
     const ro = new ResizeObserver(entries => {
       for (const entry of entries) {
         const { width, height } = entry.contentRect;
-        this.circles.forEach(c => c.size(width, height, 5));
-        this.keys.forEach(k => k.size(width / 2, height / 2, 4));
+        const circles = entry.target.querySelectorAll('mm-circle');
+        circles.forEach(c => {
+          let key = false;
+          if (c.classList.contains('key')) {
+            key = true;
+          }
+          c.size(key ? width / 2 : width, key ? height / 2 : height, 5);
+        });
       }
     });
-
-    ro.observe(shadowRoot.querySelector('.container'));
+    containers.forEach(c => ro.observe(c));
   }
 }
 window.customElements.define('mm-board-row', MmBoardRow);
