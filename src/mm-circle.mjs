@@ -6,7 +6,7 @@ tmpl.innerHTML = html`
     :host {
       background: #343434;
       border-radius: 50%;
-      transform: background;
+      transition: background .3s ease-in-out;
     }
   </style>
 `;

@@ -1,6 +1,6 @@
 import html from './html.mjs';
-import './mm-circle.mjs';
-import ResizeObserver from './../node_modules/resize-observer-polyfill/dist/ResizeObserver.es.js';
+import './mm-board-item.mjs';
+import './mm-board-result.mjs';
 
 const tmpl = document.createElement('template');
 tmpl.innerHTML = html`
@@ -13,53 +13,12 @@ tmpl.innerHTML = html`
       display: flex;
     }
 
-    .container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex: 1;
-      margin: 2px;
-      transition: all 1s ease-in-out;
-    }
-
-    .keys {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .keys-row {
-      display: flex;
-      align-items: center;
-      width: 100%;
-    }
-
-    .key {
-      margin: 2px;
-    }
-
   </style>
-  <div class="container">
-    <mm-circle></mm-circle>
-  </div>
-  <div class="container">
-    <mm-circle></mm-circle>
-  </div>
-  <div class="container">
-    <mm-circle></mm-circle>
-  </div>
-  <div class="container">
-    <mm-circle></mm-circle>
-  </div>
-  <div class="container keys">
-    <div class="keys-row">
-      <mm-circle class="key"></mm-circle>
-      <mm-circle class="key"></mm-circle>
-    </div>
-    <div class="keys-row">
-      <mm-circle class="key"></mm-circle>
-      <mm-circle class="key"></mm-circle>
-    </div>
-  </div>
+  <mm-board-item></mm-board-item>
+  <mm-board-item></mm-board-item>
+  <mm-board-item></mm-board-item>
+  <mm-board-item></mm-board-item>
+  <mm-board-result></mm-board-result>
 `;
 
 class MmBoardRow extends HTMLElement {
@@ -75,24 +34,13 @@ class MmBoardRow extends HTMLElement {
     let shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.appendChild(tmpl.content.cloneNode(true));
 
-    const containers = shadowRoot.querySelectorAll('.container');
-    this.circles = shadowRoot.querySelectorAll('mm-circle:not(.key)');
-    this.keys = shadowRoot.querySelectorAll('mm-circle.key');
-
-    const ro = new ResizeObserver(entries => {
-      for (const entry of entries) {
-        const { width, height } = entry.contentRect;
-        const circles = entry.target.querySelectorAll('mm-circle');
-        circles.forEach(c => {
-          let key = false;
-          if (c.classList.contains('key')) {
-            key = true;
-          }
-          c.size(key ? width / 2 : width, key ? height / 2 : height, 5);
-        });
-      }
-    });
-    containers.forEach(c => ro.observe(c));
+    /* this.result = shadowRoot.querySelector('mm-board-result');
+    setTimeout(() => {
+      this.result.setResult({
+        hits: Math.floor(Math.random() * 3),
+        pseudoHits: Math.floor(Math.random() * 3)
+      });
+    }, 50); */
   }
 }
 window.customElements.define('mm-board-row', MmBoardRow);
