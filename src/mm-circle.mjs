@@ -6,7 +6,7 @@ tmpl.innerHTML = html`
     :host {
       background: #343434;
       border-radius: 50%;
-      opacity: 1;
+      opacity: .2;
       transition: background .3s ease-in-out, opacity .3s ease-in-out;
     }
   </style>
@@ -26,18 +26,27 @@ class MmCircle extends HTMLElement {
     shadowRoot.appendChild(tmpl.content.cloneNode(true));
   }
 
-  size(width, height, spacing) {
+  setSize(width, height, spacing) {
     const size = `${width > height ? height - spacing : width - spacing}px`;
     this.style.width = size;
     this.style.height = size;
   }
 
-  color(color) {
+  setColor(color) {
     this.style.background = color;
   }
 
-  value(value) {
+  setValue(value) {
     this.value = value;
+  }
+
+  setSelected(bool) {
+    this.selected = bool;
+    this.setActive(this.selected);
+  }
+
+  setActive(bool) {
+    this.style.opacity = bool ? 1 : 0.2;
   }
 }
 window.customElements.define('mm-circle', MmCircle);
