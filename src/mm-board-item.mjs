@@ -12,14 +12,13 @@ tmpl.innerHTML = html`
       flex: 1;
       margin: 2px;
       transition: all .7s ease-in-out;
-      justify-content: space-evenly;
     }
 
     .transition {
-      transition: all .5s ease-in-out;
+      transition: all .5s ease-in-out, margin 1s ease-in-out;
     }
 
-    .hidden{
+    .hidden {
       height: 0 !important;
       width: 0 !important;
       opacity: 0;
@@ -49,9 +48,20 @@ class MmBoardItem extends HTMLElement {
 
     this.active = false;
     this.animating = false;
+    this.onClick = this.onClick.bind(this);
+
+    const colors = [
+      '#FAFAFA',
+      '#F44336',
+      '#2196F3',
+      '#4CAF50',
+      '#FFEB3B',
+      '#FF9800'
+    ];
 
     this.circles = shadowRoot.querySelectorAll('mm-circle');
-    this.circles.forEach(c => {
+    this.circles.forEach((c, i) => {
+      c.color(colors[i]);
       if (!c.classList.contains('hidden')) c.active = true;
     });
 
@@ -59,9 +69,13 @@ class MmBoardItem extends HTMLElement {
       for (const entry of entries) {
         const { width, height } = entry.contentRect;
         this.circles.forEach(c => {
-          this.showingCircles || this.animating
-            ? c.size(width / 1.3, height / 1.3, 5)
-            : c.size(width, height, 5);
+          if (this.showingCircles || this.animating) {
+            c.size(width / 1.2, height / 1.2, 5);
+            c.style.margin = '0 2px';
+          } else {
+            c.size(width, height, 5);
+            c.style.margin = '0';
+          }
         });
       }
     });
@@ -85,6 +99,7 @@ class MmBoardItem extends HTMLElement {
   showCircles() {
     this.showingCircles = true;
     this.circles.forEach((c, i) => {
+      c.addEventListener('click', this.onClick, true);
       c.classList.add('transition');
       setTimeout(() => {
         c.classList.remove('hidden');
@@ -96,6 +111,7 @@ class MmBoardItem extends HTMLElement {
     if (!this.showingCircles) return;
     this.animating = true;
     this.circles.forEach((c, i) => {
+      c.removeEventListener('click', this.onClick, true);
       if (!c.active) {
         setTimeout(() => {
           c.classList.add('hidden');
@@ -111,6 +127,15 @@ class MmBoardItem extends HTMLElement {
       }
     });
     this.showingCircles = false;
+  }
+
+  onClick(e) {
+    e.stopPropagation();
+    this.circles.forEach(c => {
+      c.active = c === e.target;
+    });
+    this.setActive(false);
+    this.animate();
   }
 }
 window.customElements.define('mm-board-item', MmBoardItem);

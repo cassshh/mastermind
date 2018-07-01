@@ -34,10 +34,10 @@ class MmBoardRow extends HTMLElement {
     let shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.appendChild(tmpl.content.cloneNode(true));
 
+    this.onClick = this.onClick.bind(this);
+
     this.items = shadowRoot.querySelectorAll('mm-board-item');
-    this.items.forEach(i =>
-      i.addEventListener('click', this.onClick.bind(this))
-    );
+    this.items.forEach(i => i.addEventListener('click', this.onClick));
 
     /* this.result = shadowRoot.querySelector('mm-board-result');
     setTimeout(() => {
