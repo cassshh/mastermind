@@ -6,7 +6,8 @@ tmpl.innerHTML = html`
     :host {
       background: #343434;
       border-radius: 50%;
-      transition: background .3s ease-in-out;
+      opacity: 1;
+      transition: background .3s ease-in-out, opacity .3s ease-in-out;
     }
   </style>
 `;
@@ -33,6 +34,10 @@ class MmCircle extends HTMLElement {
 
   color(color) {
     this.style.background = color;
+  }
+
+  value(value) {
+    this.value = value;
   }
 }
 window.customElements.define('mm-circle', MmCircle);

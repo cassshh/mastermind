@@ -1,6 +1,7 @@
 import html from './html.mjs';
 import './mm-circle.mjs';
 import ResizeObserver from './../node_modules/resize-observer-polyfill/dist/ResizeObserver.es.js';
+import { colors } from './config.mjs';
 
 const tmpl = document.createElement('template');
 tmpl.innerHTML = html`
@@ -51,17 +52,9 @@ class MmBoardItem extends HTMLElement {
     this.dnd = false;
     this.onClick = this.onClick.bind(this);
 
-    const colors = [
-      '#FAFAFA',
-      '#F44336',
-      '#2196F3',
-      '#4CAF50',
-      '#FFEB3B',
-      '#FF9800'
-    ];
-
     this.circles = shadowRoot.querySelectorAll('mm-circle');
     this.circles.forEach((c, i) => {
+      c.value(i);
       c.color(colors[i]);
       if (!c.classList.contains('hidden')) c.active = true;
     });

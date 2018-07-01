@@ -39,6 +39,8 @@ class MmBoardRow extends HTMLElement {
     this.items = shadowRoot.querySelectorAll('mm-board-item');
     this.items.forEach(i => i.addEventListener('click', this.onClick));
 
+    this.result = shadowRoot.querySelector('mm-board-result');
+
     /* this.result = shadowRoot.querySelector('mm-board-result');
     setTimeout(() => {
       this.result.setResult({
@@ -61,6 +63,10 @@ class MmBoardRow extends HTMLElement {
     setTimeout(() => {
       i.animate();
     }, wait ? 600 : 200);
+  }
+
+  setActive(bool) {
+    this.style.flex = bool ? 1.1 : 1;
   }
 }
 window.customElements.define('mm-board-row', MmBoardRow);

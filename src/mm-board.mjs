@@ -21,6 +21,7 @@ tmpl.innerHTML = html`
       flex: 1;
       width: 100%;
       max-width: 600px;
+      transition: all .5s ease;
     }
   </style>
   <mm-board-row></mm-board-row>
@@ -49,6 +50,9 @@ class MmBoard extends HTMLElement {
     // Attach a shadow root to the element.
     let shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.appendChild(tmpl.content.cloneNode(true));
+
+    this.rows = shadowRoot.querySelectorAll('mm-board-row');
+    setTimeout(() => this.rows[this.rows.length - 1].setActive(true), 500);
   }
 }
 window.customElements.define('mm-board', MmBoard);
