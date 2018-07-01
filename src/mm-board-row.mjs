@@ -34,6 +34,11 @@ class MmBoardRow extends HTMLElement {
     let shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.appendChild(tmpl.content.cloneNode(true));
 
+    this.items = shadowRoot.querySelectorAll('mm-board-item');
+    this.items.forEach(i =>
+      i.addEventListener('click', this.onClick.bind(this))
+    );
+
     /* this.result = shadowRoot.querySelector('mm-board-result');
     setTimeout(() => {
       this.result.setResult({
@@ -41,6 +46,21 @@ class MmBoardRow extends HTMLElement {
         pseudoHits: Math.floor(Math.random() * 3)
       });
     }, 50); */
+  }
+
+  onClick(e) {
+    const i = e.target;
+    if (i.active) return;
+    let wait = false;
+    this.items.forEach(i => {
+      if (i.showingCircles) wait = true;
+      i.setActive(false);
+      i.animate();
+    });
+    i.setActive(true);
+    setTimeout(() => {
+      i.animate();
+    }, wait ? 400 : 200);
   }
 }
 window.customElements.define('mm-board-row', MmBoardRow);
