@@ -11,6 +11,7 @@ tmpl.innerHTML = html`
       display: -ms-flexbox;
       display: -webkit-flex;
       display: flex;
+      transition: opacity .3s ease-in-out;
     }
 
   </style>
@@ -37,23 +38,10 @@ class MmBoardRow extends HTMLElement {
     this.onClick = this.onClick.bind(this);
     this.validateSend = this.validateSend.bind(this);
     this.validateCode = this.validateCode.bind(this);
+    this.setResult = this.setResult.bind(this);
 
     this.items = shadowRoot.querySelectorAll('mm-board-item');
-    this.items.forEach(i => {
-      i.addEventListener('click', this.onClick);
-      i.addEventListener('selected', this.validateSend);
-    });
-
     this.result = shadowRoot.querySelector('mm-board-result');
-    this.result.addEventListener('send', this.validateCode);
-
-    /* this.result = shadowRoot.querySelector('mm-board-result');
-    setTimeout(() => {
-      this.result.setResult({
-        hits: Math.floor(Math.random() * 3),
-        pseudoHits: Math.floor(Math.random() * 3)
-      });
-    }, 50); */
   }
 
   onClick(e) {
@@ -73,6 +61,20 @@ class MmBoardRow extends HTMLElement {
 
   setActive(bool) {
     this.style.flex = bool ? 1.1 : 1;
+    this.style.opacity = bool || this.result.showResult ? 1 : 0.2;
+    if (bool) {
+      this.items.forEach(i => {
+        i.addEventListener('click', this.onClick);
+        i.addEventListener('selected', this.validateSend);
+      });
+      this.result.addEventListener('send', this.validateCode);
+    } else {
+      this.items.forEach(i => {
+        i.removeEventListener('click', this.onClick);
+        i.removeEventListener('selected', this.validateSend);
+      });
+      this.result.removeEventListener('send', this.validateCode);
+    }
   }
 
   validateSend() {
@@ -84,7 +86,17 @@ class MmBoardRow extends HTMLElement {
   }
 
   validateCode() {
-    console.log('Start validation');
+    const code = [];
+    this.items.forEach(i => {
+      i.setActive(false);
+      i.animate();
+      code.push(i.getSelected().value);
+    });
+    this.dispatchEvent(new CustomEvent('try', { detail: { code } }));
+  }
+
+  setResult(result) {
+    this.result.setResult(result);
   }
 }
 window.customElements.define('mm-board-row', MmBoardRow);

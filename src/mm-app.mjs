@@ -2,6 +2,7 @@ import html from './html.mjs';
 import './mm-toolbar.mjs';
 import './mm-play.mjs';
 import './mm-board.mjs';
+import Master from './master.mjs';
 
 const tmpl = document.createElement('template');
 tmpl.innerHTML = html`
@@ -45,6 +46,15 @@ class MmApp extends HTMLElement {
     //   this.toolbar.classList.add('toolbar');
     //   setTimeout(() => this.play.hide(), 500);
     // });
+    this.board = shadowRoot.querySelector('mm-board');
+
+    this.newGame();
+  }
+
+  newGame() {
+    this.master = new Master();
+    console.log(this.master.solution);
+    this.board.setGame(this.master);
   }
 }
 window.customElements.define('mm-app', MmApp);

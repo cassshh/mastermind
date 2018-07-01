@@ -119,11 +119,12 @@ class MmBoardResult extends HTMLElement {
   }
 
   setResult({ hits, pseudoHits }) {
-    this.setSend(false);
     this.keysRows.forEach(r => (r.style.flex = 1));
-    this.circles.forEach(c => {
-      if (hits-- > 0) c.color('red');
-      else if (pseudoHits-- > 0) c.color('white');
+    this.circles.forEach((c, i) => {
+      c.setActive(true);
+      if (hits-- > 0) setTimeout(() => c.setColor('red'), 300 * i);
+      else if (pseudoHits-- > 0)
+        setTimeout(() => c.setColor('#FAFAFA'), 300 * i);
       return;
     });
   }

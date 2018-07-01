@@ -1,9 +1,9 @@
 export default class Master {
-  constructor({ solution, tries = 12 }) {
-    this.solution = solution;
+  constructor({ tries = 12 } = {}) {
+    this.solution = this.generate();
     this.tries = tries;
-    this.calc = this.calc;
-    this.try = this.try;
+    this.try = this.try.bind(this);
+    this.guess = this.guess;
   }
 
   try({ guess = [] }) {
@@ -11,7 +11,7 @@ export default class Master {
   }
 
   guess({ guess = [] }) {
-    if (guess.length !== this.solution.length) return;
+    if (guess.length !== this.solution.length) return {};
 
     const obj = { hits: 0, pseudoHits: 0 };
     const solution = this.solution.slice(); // Copy
@@ -31,5 +31,13 @@ export default class Master {
     });
 
     return obj;
+  }
+
+  generate() {
+    return new Array(4).fill(0).map(() => this.random());
+  }
+
+  random() {
+    return Math.round(Math.random() * 5);
   }
 }

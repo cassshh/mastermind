@@ -51,8 +51,37 @@ class MmBoard extends HTMLElement {
     let shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.appendChild(tmpl.content.cloneNode(true));
 
+    this.try = this.try.bind(this);
+
     this.rows = shadowRoot.querySelectorAll('mm-board-row');
-    setTimeout(() => this.rows[this.rows.length - 1].setActive(true), 500);
+  }
+
+  setGame(master) {
+    this.master = master;
+    this.setActive(master.tries - 1);
+  }
+
+  setActive(i) {
+    this.rows.forEach((r, c) => {
+      i === c
+        ? r.addEventListener('try', this.try)
+        : r.removeEventListener('try', this.try);
+      setTimeout(() => {
+        r.setActive(i === c);
+      }, 0);
+    });
+  }
+
+  try(e) {
+    const result = this.master.try({ guess: e.detail.code });
+    this.rows[result.tries].setResult(result);
+    if (result.hits == 4) {
+      return console.log('WIN :D');
+    }
+    if (!result.tries) {
+      return console.log('Game over noob');
+    }
+    return this.setActive(result.tries - 1);
   }
 }
 window.customElements.define('mm-board', MmBoard);
