@@ -135,6 +135,15 @@ class MmBoardItem extends HTMLElement {
     });
     this.setActive(false);
     this.animate();
+    this.dispatchEvent(new CustomEvent('selected', {}));
+  }
+
+  getSelected() {
+    let selected = null;
+    this.circles.forEach(c => {
+      if (c.selected) selected = c;
+    });
+    return selected;
   }
 }
 window.customElements.define('mm-board-item', MmBoardItem);

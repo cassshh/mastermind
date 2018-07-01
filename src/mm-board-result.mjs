@@ -35,15 +35,12 @@ tmpl.innerHTML = html`
       display: flex;
       flex: 0;
       height: unset;
+      width: 0;
       transition: all .5s ease-in-out;
     }
 
     #arrow {
       fill: #FAFAFA;
-    }
-
-    mm-circle {
-      margin: 2px;
     }
 
   </style>
@@ -75,11 +72,13 @@ class MmBoardResult extends HTMLElement {
     let shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.appendChild(tmpl.content.cloneNode(true));
 
-    this.showSend = false;
     this.showResult = false;
+
+    this.onClick = this.onClick.bind(this);
 
     this.sendContainer = shadowRoot.querySelector('.send-container');
     this.send = shadowRoot.querySelector('.send');
+    this.send.addEventListener('click', this.onClick);
 
     this.keysRows = shadowRoot.querySelectorAll('.keys-row');
 
@@ -89,25 +88,33 @@ class MmBoardResult extends HTMLElement {
       for (const entry of entries) {
         const { width, height } = entry.contentRect;
         this.circles.forEach(c => {
-          if (this.showResult) c.size(width / 2, height / 2, 5);
+          if (this.showResult) c.setSize(width, height, 5);
         });
       }
     });
-    ro.observe(this);
+    this.keysRows.forEach(r => {
+      ro.observe(r);
+    });
   }
 
-  setSend(bool) {
-    if (bool) {
+  showSend(bool) {
+    if (bool && !this.showResult) {
       this.style.flex = 1;
       this.sendContainer.style.flex = 1;
       setTimeout(() => (this.send.style.flex = 1), 100);
     } else {
+      this.showResult = true;
       this.sendContainer.style.justifyContent = 'flex-end';
       this.send.style.flex = 0;
-      // setTimeout(() => {
-      //   this.style.flex = 0;
-      //   this.sendContainer.style.flex = 0;
-      // }, 150);
+      setTimeout(() => {
+        this.sendContainer.style.flex = 0;
+        this.keysRows.forEach(r => {
+          r.style.flex = 1;
+        });
+        this.circles.forEach(c => {
+          c.style.margin = '2px';
+        });
+      }, 150);
     }
   }
 
@@ -119,6 +126,11 @@ class MmBoardResult extends HTMLElement {
       else if (pseudoHits-- > 0) c.color('white');
       return;
     });
+  }
+
+  onClick() {
+    this.showSend(false);
+    this.dispatchEvent(new CustomEvent('send', {}));
   }
 }
 window.customElements.define('mm-board-result', MmBoardResult);

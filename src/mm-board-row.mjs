@@ -35,11 +35,17 @@ class MmBoardRow extends HTMLElement {
     shadowRoot.appendChild(tmpl.content.cloneNode(true));
 
     this.onClick = this.onClick.bind(this);
+    this.validateSend = this.validateSend.bind(this);
+    this.validateCode = this.validateCode.bind(this);
 
     this.items = shadowRoot.querySelectorAll('mm-board-item');
-    this.items.forEach(i => i.addEventListener('click', this.onClick));
+    this.items.forEach(i => {
+      i.addEventListener('click', this.onClick);
+      i.addEventListener('selected', this.validateSend);
+    });
 
     this.result = shadowRoot.querySelector('mm-board-result');
+    this.result.addEventListener('send', this.validateCode);
 
     /* this.result = shadowRoot.querySelector('mm-board-result');
     setTimeout(() => {
@@ -67,6 +73,18 @@ class MmBoardRow extends HTMLElement {
 
   setActive(bool) {
     this.style.flex = bool ? 1.1 : 1;
+  }
+
+  validateSend() {
+    let allSelected = true;
+    this.items.forEach(i => {
+      if (!i.getSelected()) allSelected = false;
+    });
+    if (allSelected) this.result.showSend(true);
+  }
+
+  validateCode() {
+    console.log('Start validation');
   }
 }
 window.customElements.define('mm-board-row', MmBoardRow);
