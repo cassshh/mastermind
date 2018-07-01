@@ -50,7 +50,7 @@ class MmBoardRow extends HTMLElement {
 
   onClick(e) {
     const i = e.target;
-    if (i.active) return;
+    if (i.active || i.dnd) return;
     let wait = false;
     this.items.forEach(i => {
       if (i.showingCircles) wait = true;

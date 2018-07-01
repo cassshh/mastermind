@@ -48,6 +48,7 @@ class MmBoardItem extends HTMLElement {
 
     this.active = false;
     this.animating = false;
+    this.dnd = false;
     this.onClick = this.onClick.bind(this);
 
     const colors = [
@@ -110,6 +111,7 @@ class MmBoardItem extends HTMLElement {
   hideCircles() {
     if (!this.showingCircles) return;
     this.animating = true;
+    this.dnd = true;
     this.circles.forEach((c, i) => {
       c.removeEventListener('click', this.onClick, true);
       if (!c.active) {
@@ -123,6 +125,7 @@ class MmBoardItem extends HTMLElement {
         this.animating = false;
         setTimeout(() => {
           c.classList.remove('transition');
+          this.dnd = false;
         }, 600);
       }
     });
