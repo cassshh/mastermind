@@ -30,6 +30,8 @@ tmpl.innerHTML = html`
   <mm-circle class="hidden"></mm-circle>
   <mm-circle class="hidden"></mm-circle>
   <mm-circle class="hidden"></mm-circle>
+  <mm-circle class="hidden"></mm-circle>
+  <mm-circle class="hidden"></mm-circle>
 `;
 
 class MmBoardItem extends HTMLElement {
@@ -46,6 +48,7 @@ class MmBoardItem extends HTMLElement {
     shadowRoot.appendChild(tmpl.content.cloneNode(true));
 
     this.active = false;
+    this.animating = false;
 
     this.circles = shadowRoot.querySelectorAll('mm-circle');
     this.circles.forEach(c => {
@@ -56,7 +59,9 @@ class MmBoardItem extends HTMLElement {
       for (const entry of entries) {
         const { width, height } = entry.contentRect;
         this.circles.forEach(c => {
-          c.size(width, height, 5);
+          this.showingCircles || this.animating
+            ? c.size(width / 1.3, height / 1.3, 5)
+            : c.size(width, height, 5);
         });
       }
     });
@@ -75,7 +80,6 @@ class MmBoardItem extends HTMLElement {
     } else {
       this.hideCircles();
     }
-    // this.active ? this.showCircles() : this.hideCircles();
   }
 
   showCircles() {
@@ -90,16 +94,20 @@ class MmBoardItem extends HTMLElement {
 
   hideCircles() {
     if (!this.showingCircles) return;
+    this.animating = true;
     this.circles.forEach((c, i) => {
       if (!c.active) {
         setTimeout(() => {
           c.classList.add('hidden');
+          setTimeout(() => {
+            c.classList.remove('transition');
+          }, 600);
         }, 100 * i);
+      } else {
+        this.animating = false;
         setTimeout(() => {
           c.classList.remove('transition');
-        }, 600 * i);
-      } else {
-        c.classList.remove('transition');
+        }, 600);
       }
     });
     this.showingCircles = false;

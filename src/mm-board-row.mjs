@@ -60,7 +60,7 @@ class MmBoardRow extends HTMLElement {
     i.setActive(true);
     setTimeout(() => {
       i.animate();
-    }, wait ? 400 : 200);
+    }, wait ? 600 : 200);
   }
 }
 window.customElements.define('mm-board-row', MmBoardRow);
