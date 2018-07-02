@@ -110,6 +110,7 @@ export default class MmBoard extends HTMLElement {
       this.solution.classList.remove('solution');
       this.solution.style.flex = 1.2;
       this.solution.showReplay();
+      return;
     }
     return this.setActive(result.tries - 1);
   }
