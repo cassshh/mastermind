@@ -1,3 +1,5 @@
+import { colors } from './config.mjs';
+
 export default class Master {
   constructor({ tries = 12 } = {}) {
     this.solution = this.generate();
@@ -15,8 +17,7 @@ export default class Master {
 
     const obj = { hits: 0, pseudoHits: 0 };
     const solution = this.solution.slice(); // Copy
-    const freq = new Array(this.solution.length).fill(0);
-
+    const freq = new Array(colors.length).fill(0);
     guess.forEach((v, i) => {
       if (v === this.solution[i]) {
         obj.hits += 1;
@@ -27,7 +28,7 @@ export default class Master {
     });
 
     freq.forEach((v, i) => {
-      if (v > 0 && this.solution.includes(i)) obj.pseudoHits++;
+      if (v > 0 && solution.includes(i)) obj.pseudoHits++;
     });
 
     return obj;

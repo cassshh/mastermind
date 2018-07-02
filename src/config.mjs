@@ -7,6 +7,4 @@ const colors = [
   '#FF9800'
 ];
 
-const tries = 12;
-
-export { colors, tries };
+export { colors };
