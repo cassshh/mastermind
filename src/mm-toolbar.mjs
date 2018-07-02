@@ -1,5 +1,8 @@
 import html from './html.mjs';
 
+/**
+ * Template literal
+ */
 const tmpl = document.createElement('template');
 tmpl.innerHTML = html`
   <style>
@@ -23,7 +26,9 @@ tmpl.innerHTML = html`
   </style>
   <slot></slot>
 `;
-
+/**
+ * Toolbar component
+ */
 export default class MmToolbar extends HTMLElement {
   constructor() {
     super();
@@ -38,4 +43,7 @@ export default class MmToolbar extends HTMLElement {
     shadowRoot.appendChild(tmpl.content.cloneNode(true));
   }
 }
+/**
+ * Define custom element
+ */
 window.customElements.define('mm-toolbar', MmToolbar);

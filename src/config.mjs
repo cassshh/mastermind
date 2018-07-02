@@ -1,3 +1,6 @@
+/**
+ * Color definitions
+ */
 const colors = [
   '#FAFAFA',
   '#F44336',

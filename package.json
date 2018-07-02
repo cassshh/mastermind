@@ -1,7 +1,7 @@
 {
   "name": "mastermind",
   "version": "1.0.0",
-  "description": "Mastermind the game",
+  "description": "Mastermind; The mind breaking game",
   "main": "index.html",
   "repository": "git@github.com:cassshh/Mastermind.git",
   "author": "cassshh",

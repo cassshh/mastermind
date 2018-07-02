@@ -1,17 +1,27 @@
 import { colors } from './config.mjs';
 
+/**
+ * The mind
+ */
 export default class Master {
   constructor({ tries = 12 } = {}) {
     this.solution = this.generate();
     this.tries = tries;
     this.try = this.try.bind(this);
-    this.guess = this.guess;
   }
 
+  /**
+   * Try code and substract tries
+   * @param param0
+   */
   try({ guess = [] }) {
     return Object.assign(this.guess({ guess }), { tries: --this.tries });
   }
 
+  /**
+   * Guess code
+   * @param param0
+   */
   guess({ guess = [] }) {
     if (guess.length !== this.solution.length) return {};
 
@@ -34,10 +44,16 @@ export default class Master {
     return obj;
   }
 
+  /**
+   * Generate code
+   */
   generate() {
     return new Array(4).fill(0).map(() => this.random());
   }
 
+  /**
+   * Generate number
+   */
   random() {
     return Math.round(Math.random() * 5);
   }

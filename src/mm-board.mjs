@@ -1,6 +1,9 @@
 import html from './html.mjs';
 import './mm-board-row.mjs';
 
+/**
+ * Template literal
+ */
 const tmpl = document.createElement('template');
 tmpl.innerHTML = html`
   <style>
@@ -44,6 +47,9 @@ tmpl.innerHTML = html`
   <mm-board-row></mm-board-row>
 `;
 
+/**
+ * Board component
+ */
 export default class MmBoard extends HTMLElement {
   constructor() {
     super();
@@ -60,18 +66,27 @@ export default class MmBoard extends HTMLElement {
     this.try = this.try.bind(this);
 
     this.rows = shadowRoot.querySelectorAll('mm-board-row:not(.solution)');
+
     this.solution = shadowRoot.querySelector('mm-board-row.solution');
     this.solution.addEventListener('replay', () =>
       this.dispatchEvent(new CustomEvent('replay', {}))
     );
   }
 
+  /**
+   * Set game
+   * @param master
+   */
   setGame(master) {
     this.master = master;
     this.solution.setSolution(this.master.solution);
     this.setActive(master.tries - 1);
   }
 
+  /**
+   * Set active board row
+   * @param i
+   */
   setActive(i) {
     this.rows.forEach((r, c) => {
       i === c
@@ -83,6 +98,10 @@ export default class MmBoard extends HTMLElement {
     });
   }
 
+  /**
+   * Try code and check if won or lose
+   * @param e
+   */
   try(e) {
     const result = this.master.try({ guess: e.detail.code });
     this.rows[result.tries].setResult(result);
@@ -95,4 +114,7 @@ export default class MmBoard extends HTMLElement {
     return this.setActive(result.tries - 1);
   }
 }
+/**
+ * Define custom element
+ */
 window.customElements.define('mm-board', MmBoard);

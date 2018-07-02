@@ -2,6 +2,9 @@ import html from './html.mjs';
 import './mm-board-item.mjs';
 import './mm-board-result.mjs';
 
+/**
+ * Template listeral
+ */
 const tmpl = document.createElement('template');
 tmpl.innerHTML = html`
   <style>
@@ -22,6 +25,9 @@ tmpl.innerHTML = html`
   <mm-board-result></mm-board-result>
 `;
 
+/**
+ * Board row component
+ */
 export default class MmBoardRow extends HTMLElement {
   constructor() {
     super();
@@ -41,12 +47,17 @@ export default class MmBoardRow extends HTMLElement {
     this.setResult = this.setResult.bind(this);
 
     this.items = shadowRoot.querySelectorAll('mm-board-item');
+
     this.result = shadowRoot.querySelector('mm-board-result');
     this.result.addEventListener('replay', () =>
       this.dispatchEvent(new CustomEvent('replay', {}))
     );
   }
 
+  /**
+   * On click listener
+   * @param e
+   */
   onClick(e) {
     const i = e.target;
     if (i.active || i.dnd) return;
@@ -62,6 +73,10 @@ export default class MmBoardRow extends HTMLElement {
     }, wait ? 600 : 200);
   }
 
+  /**
+   * Set row active state
+   * @param bool
+   */
   setActive(bool) {
     this.style.flex = bool ? 1.1 : 1;
     this.style.opacity = bool || this.result.showResult ? 1 : 0.2;
@@ -80,6 +95,10 @@ export default class MmBoardRow extends HTMLElement {
     }
   }
 
+  /**
+   * Validate if all circles are filled in
+   * Show send button
+   */
   validateSend() {
     let allSelected = true;
     this.items.forEach(i => {
@@ -88,6 +107,9 @@ export default class MmBoardRow extends HTMLElement {
     if (allSelected) this.result.showSend(true);
   }
 
+  /**
+   * Fetch code and dispatch event
+   */
   validateCode() {
     const code = [];
     this.items.forEach(i => {
@@ -98,10 +120,18 @@ export default class MmBoardRow extends HTMLElement {
     this.dispatchEvent(new CustomEvent('try', { detail: { code } }));
   }
 
+  /**
+   * Set code attempt result
+   * @param result
+   */
   setResult(result) {
     this.result.setResult(result);
   }
 
+  /**
+   * Set color codes for solution
+   * @param solution
+   */
   setSolution(solution) {
     this.items.forEach((i, index) => {
       const color = solution[index];
@@ -109,8 +139,14 @@ export default class MmBoardRow extends HTMLElement {
     });
   }
 
+  /**
+   * Show replay button
+   */
   showReplay() {
     this.result.showReplay();
   }
 }
+/**
+ * Define custom element
+ */
 window.customElements.define('mm-board-row', MmBoardRow);

@@ -2,6 +2,9 @@ import html from './html.mjs';
 import './mm-circle.mjs';
 import ResizeObserver from './../node_modules/resize-observer-polyfill/dist/ResizeObserver.es.js';
 
+/**
+ * Template literal
+ */
 const tmpl = document.createElement('template');
 tmpl.innerHTML = html`
   <style>
@@ -64,6 +67,9 @@ tmpl.innerHTML = html`
   </div>
 `;
 
+/**
+ * Board result component
+ */
 export default class MmBoardResult extends HTMLElement {
   constructor() {
     super();
@@ -94,6 +100,10 @@ export default class MmBoardResult extends HTMLElement {
 
     this.circles = shadowRoot.querySelectorAll('mm-circle');
 
+    /**
+     * Resize Observer
+     * To adjust Circle compenents
+     */
     const ro = new ResizeObserver(entries => {
       for (const entry of entries) {
         const { width, height } = entry.contentRect;
@@ -107,6 +117,10 @@ export default class MmBoardResult extends HTMLElement {
     });
   }
 
+  /**
+   * Send button animation
+   * @param bool
+   */
   showSend(bool) {
     if (bool && !this.showResult) {
       this.style.flex = 1;
@@ -128,12 +142,19 @@ export default class MmBoardResult extends HTMLElement {
     }
   }
 
+  /**
+   * Show replay button
+   */
   showReplay() {
     this.style.flex = 1;
     this.replayContainer.style.flex = 1;
     setTimeout(() => (this.replay.style.flex = 1), 100);
   }
 
+  /**
+   * Set result of guess
+   * @param {}
+   */
   setResult({ hits, pseudoHits }) {
     this.keysRows.forEach(r => (r.style.flex = 1));
     this.circles.forEach((c, i) => {
@@ -145,13 +166,23 @@ export default class MmBoardResult extends HTMLElement {
     });
   }
 
+  /**
+   * On click listener
+   * Dispatch send event
+   */
   onClick() {
     this.showSend(false);
     this.dispatchEvent(new CustomEvent('send', {}));
   }
 
+  /**
+   * Dispatch replay event
+   */
   onReplayClick() {
     this.dispatchEvent(new CustomEvent('replay', {}));
   }
 }
+/**
+ * Define custom element
+ */
 window.customElements.define('mm-board-result', MmBoardResult);

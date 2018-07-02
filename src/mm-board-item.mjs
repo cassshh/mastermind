@@ -3,6 +3,9 @@ import './mm-circle.mjs';
 import ResizeObserver from './../node_modules/resize-observer-polyfill/dist/ResizeObserver.es.js';
 import { colors } from './config.mjs';
 
+/**
+ * Template literal
+ */
 const tmpl = document.createElement('template');
 tmpl.innerHTML = html`
   <style>
@@ -34,6 +37,9 @@ tmpl.innerHTML = html`
   <mm-circle class="hidden"></mm-circle>
 `;
 
+/**
+ * Board item component
+ */
 export default class MmBoardItem extends HTMLElement {
   constructor() {
     super();
@@ -49,16 +55,21 @@ export default class MmBoardItem extends HTMLElement {
 
     this.active = false;
     this.animating = false;
-    this.dnd = false;
+    this.dnd = false; // Do Not Disturb animation
     this.onClick = this.onClick.bind(this);
 
     this.circles = shadowRoot.querySelectorAll('mm-circle');
+    // Init colors and values
     this.circles.forEach((c, i) => {
       c.setValue(i);
       c.setColor(colors[i]);
       if (!c.classList.contains('hidden')) c.active = true;
     });
 
+    /**
+     * Resize Observer
+     * To adjust Circle compenents according to states
+     */
     const ro = new ResizeObserver(entries => {
       for (const entry of entries) {
         const { width, height } = entry.contentRect;
@@ -76,11 +87,17 @@ export default class MmBoardItem extends HTMLElement {
     ro.observe(this);
   }
 
+  /**
+   * Set active
+   * @param bool
+   */
   setActive(bool) {
     this.active = bool;
-    return this.active;
   }
 
+  /**
+   * Animation
+   */
   animate() {
     this.style.flex = this.active ? 10 : 1;
     if (this.active) {
@@ -90,6 +107,9 @@ export default class MmBoardItem extends HTMLElement {
     }
   }
 
+  /**
+   * Animate showing circles
+   */
   showCircles() {
     this.showingCircles = true;
     this.circles.forEach((c, i) => {
@@ -102,6 +122,9 @@ export default class MmBoardItem extends HTMLElement {
     });
   }
 
+  /**
+   * Animate hiding circles
+   */
   hideCircles() {
     if (!this.showingCircles) return;
     this.animating = true;
@@ -127,6 +150,10 @@ export default class MmBoardItem extends HTMLElement {
     this.showingCircles = false;
   }
 
+  /**
+   * On click listener
+   * @param e
+   */
   onClick(e) {
     e.stopPropagation();
     this.circles.forEach(c => {
@@ -138,6 +165,9 @@ export default class MmBoardItem extends HTMLElement {
     this.dispatchEvent(new CustomEvent('selected', {}));
   }
 
+  /**
+   * Get selected circle
+   */
   getSelected() {
     let selected = null;
     this.circles.forEach(c => {
@@ -146,9 +176,17 @@ export default class MmBoardItem extends HTMLElement {
     return selected;
   }
 
+  /**
+   * Set color
+   * Used for the solution
+   * @param color
+   */
   setColor(color) {
     this.circles[0].setColor(colors[color]);
     this.circles[0].setActive(true);
   }
 }
+/**
+ * Define custom element
+ */
 window.customElements.define('mm-board-item', MmBoardItem);

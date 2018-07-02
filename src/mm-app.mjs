@@ -1,9 +1,11 @@
 import html from './html.mjs';
 import './mm-toolbar.mjs';
-import './mm-play.mjs';
 import './mm-board.mjs';
 import Master from './master.mjs';
 
+/**
+ * Template literal
+ */
 const tmpl = document.createElement('template');
 tmpl.innerHTML = html`
   <style>
@@ -16,17 +18,19 @@ tmpl.innerHTML = html`
       flex: 1;
     }
 
-    mm-toolbar.toolbar {
-      max-height: 64px;
+    mm-toolbar {
+      max-height: 52px;
       font-size: 1.75em;
     }
     
   </style>
-  <mm-toolbar class="toolbar">Mastermind</mm-toolbar>
-  <!-- <mm-play></mm-play> -->
+  <mm-toolbar>Mastermind</mm-toolbar>
   <mm-board></mm-board>
 `;
 
+/**
+ * App component
+ */
 export default class MmApp extends HTMLElement {
   constructor() {
     super();
@@ -48,10 +52,17 @@ export default class MmApp extends HTMLElement {
     this.newGame();
   }
 
+  /**
+   * Start new game
+   */
   newGame() {
     this.master = new Master();
     this.board.setGame(this.master);
-    console.log(this.master.solution);
+    // Uncomment next line for cheats
+    // console.log(`Solution: ${this.master.solution}`);
   }
 }
+/**
+ * Define custom element
+ */
 window.customElements.define('mm-app', MmApp);
