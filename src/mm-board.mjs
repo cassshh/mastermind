@@ -76,9 +76,11 @@ class MmBoard extends HTMLElement {
     const result = this.master.try({ guess: e.detail.code });
     this.rows[result.tries].setResult(result);
     if (result.hits == 4) {
+      this.rows[result.tries].setActive(false);
       return console.log('WIN :D');
     }
     if (!result.tries) {
+      this.rows[result.tries].setActive(false);
       return console.log('Game over noob');
     }
     return this.setActive(result.tries - 1);
