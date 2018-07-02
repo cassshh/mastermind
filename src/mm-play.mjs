@@ -38,7 +38,7 @@ tmpl.innerHTML = html`
   <span id="playButton" class="play">Play</span>
 `;
 
-class MmPlay extends HTMLElement {
+export default class MmPlay extends HTMLElement {
   constructor() {
     super();
     if (typeof ShadyCSS !== 'undefined') {

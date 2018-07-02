@@ -24,7 +24,7 @@ tmpl.innerHTML = html`
   <slot></slot>
 `;
 
-class MmToolbar extends HTMLElement {
+export default class MmToolbar extends HTMLElement {
   constructor() {
     super();
     if (typeof ShadyCSS !== 'undefined') {

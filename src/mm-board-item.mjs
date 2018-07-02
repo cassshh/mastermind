@@ -34,7 +34,7 @@ tmpl.innerHTML = html`
   <mm-circle class="hidden"></mm-circle>
 `;
 
-class MmBoardItem extends HTMLElement {
+export default class MmBoardItem extends HTMLElement {
   constructor() {
     super();
     if (typeof ShadyCSS !== 'undefined') {
@@ -144,6 +144,11 @@ class MmBoardItem extends HTMLElement {
       if (c.selected) selected = c;
     });
     return selected;
+  }
+
+  setColor(color) {
+    this.circles[0].setColor(colors[color]);
+    this.circles[0].setActive(true);
   }
 }
 window.customElements.define('mm-board-item', MmBoardItem);

@@ -27,7 +27,7 @@ tmpl.innerHTML = html`
   <mm-board></mm-board>
 `;
 
-class MmApp extends HTMLElement {
+export default class MmApp extends HTMLElement {
   constructor() {
     super();
     if (typeof ShadyCSS !== 'undefined') {

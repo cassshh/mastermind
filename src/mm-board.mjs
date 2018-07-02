@@ -23,7 +23,13 @@ tmpl.innerHTML = html`
       max-width: 600px;
       transition: all .5s ease;
     }
+
+    .solution {
+      flex: 0;
+    }
+
   </style>
+  <mm-board-row class="solution"></mm-board-row>
   <mm-board-row></mm-board-row>
   <mm-board-row></mm-board-row>
   <mm-board-row></mm-board-row>
@@ -38,7 +44,7 @@ tmpl.innerHTML = html`
   <mm-board-row></mm-board-row>
 `;
 
-class MmBoard extends HTMLElement {
+export default class MmBoard extends HTMLElement {
   constructor() {
     super();
     if (typeof ShadyCSS !== 'undefined') {
@@ -53,11 +59,13 @@ class MmBoard extends HTMLElement {
 
     this.try = this.try.bind(this);
 
-    this.rows = shadowRoot.querySelectorAll('mm-board-row');
+    this.rows = shadowRoot.querySelectorAll('mm-board-row:not(.solution)');
+    this.solution = shadowRoot.querySelector('mm-board-row.solution');
   }
 
   setGame(master) {
     this.master = master;
+    this.solution.setSolution(this.master.solution);
     this.setActive(master.tries - 1);
   }
 
@@ -77,10 +85,16 @@ class MmBoard extends HTMLElement {
     this.rows[result.tries].setResult(result);
     if (result.hits == 4) {
       this.rows[result.tries].setActive(false);
+      this.solution.classList.remove('solution');
+      this.solution.style.flex = 1.2;
+      this.solution.showReplay();
       return console.log('WIN :D');
     }
     if (!result.tries) {
       this.rows[result.tries].setActive(false);
+      this.solution.classList.remove('solution');
+      this.solution.style.flex = 1.2;
+      this.solution.showReplay();
       return console.log('Game over noob');
     }
     return this.setActive(result.tries - 1);

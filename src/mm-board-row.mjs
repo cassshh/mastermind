@@ -22,7 +22,7 @@ tmpl.innerHTML = html`
   <mm-board-result></mm-board-result>
 `;
 
-class MmBoardRow extends HTMLElement {
+export default class MmBoardRow extends HTMLElement {
   constructor() {
     super();
     if (typeof ShadyCSS !== 'undefined') {
@@ -97,6 +97,17 @@ class MmBoardRow extends HTMLElement {
 
   setResult(result) {
     this.result.setResult(result);
+  }
+
+  setSolution(solution) {
+    this.items.forEach((i, index) => {
+      const color = solution[index];
+      i.setColor(color);
+    });
+  }
+
+  showReplay() {
+    this.result.showReplay();
   }
 }
 window.customElements.define('mm-board-row', MmBoardRow);

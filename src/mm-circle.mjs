@@ -12,7 +12,7 @@ tmpl.innerHTML = html`
   </style>
 `;
 
-class MmCircle extends HTMLElement {
+export default class MmCircle extends HTMLElement {
   constructor() {
     super();
     if (typeof ShadyCSS !== 'undefined') {
