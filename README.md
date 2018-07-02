@@ -1,6 +1,6 @@
 # Mastermind
 
-### Masterpiece being build using the native web **#UseThePlatform** <3
+### Masterpiece being built using the native web **#UseThePlatform** <3
 
 ---
 
