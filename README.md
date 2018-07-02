@@ -16,7 +16,7 @@ HTML5/CSS3/ES6
 
 Polyfills used for unsupported browsers:
 
-- Web components
+- Web Components
 - Resize Observer
 
 ---
