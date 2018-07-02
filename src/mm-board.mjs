@@ -61,6 +61,9 @@ export default class MmBoard extends HTMLElement {
 
     this.rows = shadowRoot.querySelectorAll('mm-board-row:not(.solution)');
     this.solution = shadowRoot.querySelector('mm-board-row.solution');
+    this.solution.addEventListener('replay', () =>
+      this.dispatchEvent(new CustomEvent('replay', {}))
+    );
   }
 
   setGame(master) {
@@ -83,19 +86,11 @@ export default class MmBoard extends HTMLElement {
   try(e) {
     const result = this.master.try({ guess: e.detail.code });
     this.rows[result.tries].setResult(result);
-    if (result.hits == 4) {
+    if (result.hits == 4 || !result.tries) {
       this.rows[result.tries].setActive(false);
       this.solution.classList.remove('solution');
       this.solution.style.flex = 1.2;
       this.solution.showReplay();
-      return console.log('WIN :D');
-    }
-    if (!result.tries) {
-      this.rows[result.tries].setActive(false);
-      this.solution.classList.remove('solution');
-      this.solution.style.flex = 1.2;
-      this.solution.showReplay();
-      return console.log('Game over noob');
     }
     return this.setActive(result.tries - 1);
   }

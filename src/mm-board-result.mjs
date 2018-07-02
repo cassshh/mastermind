@@ -151,7 +151,7 @@ export default class MmBoardResult extends HTMLElement {
   }
 
   onReplayClick() {
-    console.log('Replay');
+    this.dispatchEvent(new CustomEvent('replay', {}));
   }
 }
 window.customElements.define('mm-board-result', MmBoardResult);

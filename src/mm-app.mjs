@@ -41,20 +41,17 @@ export default class MmApp extends HTMLElement {
     shadowRoot.appendChild(tmpl.content.cloneNode(true));
 
     this.toolbar = shadowRoot.querySelector('mm-toolbar');
-    // this.play = shadowRoot.querySelector('mm-play');
-    // this.play.setPlayListener(() => {
-    //   this.toolbar.classList.add('toolbar');
-    //   setTimeout(() => this.play.hide(), 500);
-    // });
+
     this.board = shadowRoot.querySelector('mm-board');
+    this.board.addEventListener('replay', () => window.location.reload());
 
     this.newGame();
   }
 
   newGame() {
     this.master = new Master();
-    console.log(this.master.solution);
     this.board.setGame(this.master);
+    console.log(this.master.solution);
   }
 }
 window.customElements.define('mm-app', MmApp);

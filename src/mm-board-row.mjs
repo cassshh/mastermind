@@ -42,6 +42,9 @@ export default class MmBoardRow extends HTMLElement {
 
     this.items = shadowRoot.querySelectorAll('mm-board-item');
     this.result = shadowRoot.querySelector('mm-board-result');
+    this.result.addEventListener('replay', () =>
+      this.dispatchEvent(new CustomEvent('replay', {}))
+    );
   }
 
   onClick(e) {
