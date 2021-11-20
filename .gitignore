@@ -1,3 +1,7 @@
+### Cargo Generated ###
+# Added by cargo
+/target
+
 ### Astro Generated ###
 # build output
 dist
