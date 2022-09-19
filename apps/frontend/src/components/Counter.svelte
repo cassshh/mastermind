@@ -1,13 +1,13 @@
 <script>
   import { onMount } from "svelte";
-  import init, { GameState } from "mastermind-rs";
+  // import init, { GameState } from "mastermind-rs";
 
-  onMount(async () => {
-    await init(); // Init Rust WASM
-    const game = GameState.new();
-    console.log(game.tries);
-    console.log(game.get_game_options());
-  });
+  // onMount(async () => {
+  //   await init(); // Init Rust WASM
+  //   const game = GameState.new();
+  //   console.log(game.tries);
+  //   console.log(game.get_game_options());
+  // });
 
   let count = 0;
 
@@ -18,7 +18,7 @@
 
   function decrement() {
     // count = add(count, -1);
-    count++;
+    count--;
   }
 </script>
 
