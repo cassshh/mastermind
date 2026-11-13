@@ -1,0 +1,103 @@
+name: Build
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Cancel superseded runs for the same pull request only; every other run gets a
+# unique group so master pushes are never cancelled or replaced.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  NODE_VERSION: '22'
+  YARN_VERSION: '1.22.22'
+
+jobs:
+  build:
+    name: build
+    # GNU cp (--parents) is required by the build script.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Yarn ${{ env.YARN_VERSION }}
+        run: npm install --global "yarn@${YARN_VERSION}"
+
+      - name: Verify toolchain versions
+        run: |
+          node --version
+          actual="$(yarn --version)"
+          echo "yarn ${actual}"
+          if [ "${actual}" != "${YARN_VERSION}" ]; then
+            echo "::error::Expected Yarn ${YARN_VERSION}, got ${actual}"
+            exit 1
+          fi
+
+      - name: Get Yarn cache directory
+        id: yarn-cache
+        run: echo "dir=$(yarn cache dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Yarn downloads
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ env.YARN_VERSION }}-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-${{ env.YARN_VERSION }}-
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+
+      - name: Build
+        run: yarn build
+
+      - name: Verify build output
+        run: |
+          set -eu
+          missing=0
+          for f in \
+            build/index.html \
+            build/src/app.mjs \
+            build/manifest.json \
+            build/service-worker.js \
+            build/browserconfig.xml \
+            build/favicon.ico \
+            build/favicon-16x16.png \
+            build/favicon-32x32.png \
+            build/images/icon.png \
+            build/images/manifest/android-chrome-192x192.png \
+            build/images/manifest/android-chrome-512x512.png \
+            build/images/manifest/apple-touch-icon.png \
+            build/images/manifest/mstile-150x150.png \
+            build/images/manifest/safari-pinned-tab.svg \
+            build/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js
+          do
+            if [ ! -f "$f" ]; then
+              echo "::error::Missing file: $f"
+              missing=1
+            fi
+          done
+          for d in build/images build/node_modules/@webcomponents/webcomponentsjs; do
+            if [ ! -d "$d" ]; then
+              echo "::error::Missing directory: $d"
+              missing=1
+            fi
+          done
+          exit "$missing"
