@@ -7,6 +7,7 @@ on:
       - master
   workflow_dispatch:
 
+# Read-only by default. Only the deploy job below is granted Pages/OIDC write.
 permissions:
   contents: read
 
@@ -23,6 +24,8 @@ env:
 jobs:
   build:
     name: build
+    permissions:
+      contents: read
     # GNU cp (--parents) is required by the build script.
     runs-on: ubuntu-24.04
     timeout-minutes: 15
@@ -101,3 +104,43 @@ jobs:
             fi
           done
           exit "$missing"
+
+      # Only package build/ when this run is allowed to publish (see the deploy
+      # job's `if:` for the full gate). Pull requests never reach this step.
+      - name: Upload GitHub Pages artifact
+        if: >-
+          github.ref == 'refs/heads/master' &&
+          (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+          vars.PAGES_DEPLOY_ENABLED == 'true'
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: build
+
+  # Publishes the build/ artifact to GitHub Pages. Off by default: it runs only
+  # for push/workflow_dispatch on master after a successful build AND when the
+  # repository variable PAGES_DEPLOY_ENABLED is exactly 'true'. See README
+  # "Deployment (GitHub Pages)" before enabling it.
+  deploy:
+    name: deploy (GitHub Pages)
+    needs: build
+    if: >-
+      success() &&
+      github.ref == 'refs/heads/master' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+      vars.PAGES_DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      pages: write
+      id-token: write
+    # One production publisher at a time; queued deployments are not cancelled.
+    concurrency:
+      group: pages-production
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
