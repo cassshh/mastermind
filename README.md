@@ -46,3 +46,7 @@ Clean
 ```
 $ yarn clean
 ```
+
+## Running locally
+
+Install the dependencies by running `yarn` in the project root. Then run `yarn start` to serve the game locally with http-server, and open the local URL it prints in your browser.
